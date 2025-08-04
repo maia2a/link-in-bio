@@ -19,7 +19,7 @@ export const getProfileByUsername = cache(async (username: string) => {
     `
     )
     .eq("username", username)
-    .single(); // .single() garante que esperamos apenas um resultado ou um erro
+    .single();
 
   if (error) {
     console.error("Error fetching profile:", error);
