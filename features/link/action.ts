@@ -36,4 +36,24 @@ export async function createLinkAction(formData: FormData) {
   revalidatePath("/dashboard");
 }
 
-export async function deleteLinkAction(linkId: string) {}
+export async function deleteLinkAction(linkId: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+
+  const { error } = await supabase
+    .from("links")
+    .delete()
+    .eq("id", linkId)
+    .eq("user_id", user.id);
+  if (error) {
+    return { error: error.message };
+  }
+  revalidatePath("/dashboard");
+  return { success: true };
+}
