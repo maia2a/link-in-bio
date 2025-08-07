@@ -1,5 +1,5 @@
 "use server";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -8,7 +8,7 @@ const linkSchema = z.object({
   url: z.string().url("Invalid URL").min(1, "URL is required"),
 });
 
-export async function createLinkAction(formData: FormData) {
+export async function createLinkAction(formData: FormData): Promise<void> {
   const supabase = await createClient();
 
   const {
@@ -23,7 +23,7 @@ export async function createLinkAction(formData: FormData) {
     url: formData.get("url"),
   });
   if (!validateFields.success) {
-    return { error: validateFields.error };
+    throw validateFields.error;
   }
   const { error } = await supabase.from("links").insert({
     title: validateFields.data.title,
@@ -31,12 +31,12 @@ export async function createLinkAction(formData: FormData) {
     user_id: user.id,
   });
   if (error) {
-    return { error: error.message };
+    throw new Error(error.message);
   }
   revalidatePath("/dashboard");
 }
 
-export async function deleteLinkAction(linkId: string) {
+export async function deleteLinkAction(linkId: string): Promise<void> {
   const supabase = await createClient();
 
   const {
@@ -52,8 +52,8 @@ export async function deleteLinkAction(linkId: string) {
     .eq("id", linkId)
     .eq("user_id", user.id);
   if (error) {
-    return { error: error.message };
+    throw new Error(error.message);
   }
   revalidatePath("/dashboard");
-  return { success: true };
+  throw new Error("Link deleted successfully");
 }
