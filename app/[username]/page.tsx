@@ -2,11 +2,11 @@ import { getProfileByUsername } from "@/features/profile/services";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-interface ProfilePageProps {
+export default async function ProfilePage({
+  params,
+}: {
   params: { username: string };
-}
-
-export default async function ProfilePage({ params }: ProfilePageProps) {
+}) {
   const profile = await getProfileByUsername(params.username);
 
   if (!profile) {
