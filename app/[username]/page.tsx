@@ -1,4 +1,5 @@
 import { getProfileByUsername } from "@/features/profile/services";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -15,7 +16,7 @@ export default async function ProfilePage({
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4">
       <div className="w-full max-w-md mx-auto text-center">
-        <img
+        <Image
           src={profile.avatar_url || "/default-avatar.png"}
           alt={profile.full_name || "User Avatar"}
           className="w-24 h-24 rounded-full mx-auto object-cover shadow-md"
