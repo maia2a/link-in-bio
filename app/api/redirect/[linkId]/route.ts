@@ -1,13 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { linkId: string } }
+  request: Request,
+  context: { params: Promise<{ linkId: string }> }
 ) {
-  const linkId = parseInt(params.linkId, 10);
+  const { linkId: linkIdStr } = await context.params;
+  const linkId = parseInt(linkIdStr, 10);
 
-  if (isNaN(linkId)) {
+  if (!Number.isFinite(linkId)) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
