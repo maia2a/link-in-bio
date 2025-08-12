@@ -17,7 +17,7 @@ async function getUserLinks() {
   return links || [];
 }
 
-export async function DashboardPage() {
+export default async function DashboardPage() {
   const links = await getUserLinks();
 
   return (
