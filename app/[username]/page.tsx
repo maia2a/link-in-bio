@@ -3,12 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export default async function ProfilePage({
-  params,
-}: {
-  params: { username: string };
-}) {
-  const profile = await getProfileByUsername(params.username);
+interface ProfileProps {
+  params: Promise<{ username: string }>;
+}
+
+export default async function ProfilePage({ params }: ProfileProps) {
+  const { username } = await params;
+
+  const profile = await getProfileByUsername(username);
 
   if (!profile) {
     notFound();
@@ -23,7 +25,7 @@ export default async function ProfilePage({
         />
 
         <h1 className="mt-4 text-2xl font-bold text-gray-800 ">
-          {profile.full_name || `@${params.username}`}
+          {profile.full_name || `@${username}`}
         </h1>
 
         <div className="mt-8 space-y-4">

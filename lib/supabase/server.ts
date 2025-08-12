@@ -14,12 +14,16 @@ export async function createClient() {
         set(name: string, value: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value, ...options });
-          } catch (error) {}
+          } catch (error) {
+            console.error("Error setting cookie:", error);
+          }
         },
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.delete({ name, ...options });
-          } catch (error) {}
+          } catch (error) {
+            console.error("Error removing cookie:", error);
+          }
         },
       },
     }
