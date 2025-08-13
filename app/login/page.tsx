@@ -6,6 +6,8 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 export default function LoginPage() {
   const supabase = createClient();
 
+  const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`;
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
@@ -16,7 +18,7 @@ export default function LoginPage() {
           supabaseClient={supabase}
           appearance={{ theme: ThemeSupa }}
           providers={["google", "github"]}
-          redirectTo={`${location.origin}/auth/callback`}
+          redirectTo={redirectTo}
         />
       </div>
     </div>
