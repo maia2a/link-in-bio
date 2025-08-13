@@ -2,10 +2,25 @@
 import { createClient } from "@/lib/supabase/client";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function LoginPage() {
   const supabase = createClient();
+  const router = useRouter();
 
+  // Redirect to dashboard if user is already logged in
+  useEffect(() => {
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        router.push("/dashboard");
+      }
+    };
+    checkUser();
+  });
   const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`;
 
   return (
