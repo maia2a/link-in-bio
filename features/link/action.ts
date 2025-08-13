@@ -18,6 +18,25 @@ export async function createLinkAction(formData: FormData): Promise<void> {
     throw new Error("User not authenticated");
   }
 
+  const { data: existingProfile, error: profileError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("id", user.id)
+    .single();
+  if (profileError || !existingProfile) {
+    const { error: insertProfileError } = await supabase
+      .from("profiles")
+      .insert({
+        id: user.id,
+        username: user.email?.split("@")[0] || "user",
+        full_name: user.email?.split("@")[0] || "User",
+        avatar_url: user.user_metadata.avatar_url || null,
+      });
+    if (insertProfileError) {
+      throw new Error(insertProfileError.message);
+    }
+  }
+
   const validateFields = linkSchema.safeParse({
     title: formData.get("title"),
     url: formData.get("url"),
