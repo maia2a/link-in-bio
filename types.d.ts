@@ -1,8 +1,4 @@
-declare module "next" {
-  export interface PageProps {
-    params: {
-      username: string;
-    };
-    searchParams?: Record<string, any>;
-  }
-}
+export type PageParamsPromise<T extends Record<string, string>> = {
+  params: Promise<T>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};

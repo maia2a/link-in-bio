@@ -1,13 +1,12 @@
 import { getProfileByUsername } from "@/features/profile/services";
+import { PageParamsPromise } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-interface ProfileProps {
-  params: Promise<{ username: string }>;
-}
-
-export default async function ProfilePage({ params }: ProfileProps) {
+export default async function ProfilePage({
+  params,
+}: PageParamsPromise<{ username: string }>) {
   const { username } = await params;
 
   const profile = await getProfileByUsername(username);
